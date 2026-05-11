@@ -12,11 +12,9 @@ import (
 const DefaultPassword = "goproxy"
 
 func dataDir() string {
-	if d := os.Getenv("DATA_DIR"); d != "" {
-		os.MkdirAll(d, 0755)
-		return d + "/"
-	}
-	return ""
+	d := "/app/data"
+	os.MkdirAll(d, 0755)
+	return d + "/"
 }
 
 func ConfigFile() string { return dataDir() + "config.json" }
