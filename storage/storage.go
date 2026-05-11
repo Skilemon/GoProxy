@@ -43,7 +43,6 @@ type Subscription struct {
 	Status      string    `json:"status"`       // active / paused
 	ProxyCount  int       `json:"proxy_count"`
 	CreatedAt   time.Time `json:"created_at"`
-	Contributed bool      `json:"contributed"` // 是否为访客贡献
 }
 
 // SourceStatus 代理源状态
@@ -1034,28 +1033,6 @@ func (s *Storage) CountBySubscriptionID(subID int64) (active int, disabled int) 
 	return
 }
 
-// AddContributedSubscription 添加访客贡献的订阅
-func (s *Storage) AddContributedSubscription(name, url string, refreshMin int) (int64, error) {
-	if url == "" {
-		return 0, fmt.Errorf("URL 不能为空")
-	}
-	// 去重
-	var existID int64
-	err := s.db.QueryRow(`SELECT id FROM subscriptions WHERE url = ? AND url != ''`, url).Scan(&existID)
-	if err == nil {
-		return 0, fmt.Errorf("该订阅 URL 已存在")
-	}
-
-	res, err := s.db.Exec(
-		`INSERT INTO subscriptions (name, url, format, refresh_min, contributed) VALUES (?, ?, 'auto', ?, 1)`,
-		name, url, refreshMin,
-	)
-	if err != nil {
-		return 0, err
-	}
-	return res.LastInsertId()
-}
-
 // UpdateSubscription 更新订阅
 func (s *Storage) UpdateSubscription(id int64, name, url, filePath, format string, refreshMin int) error {
 	_, err := s.db.Exec(
@@ -1164,14 +1141,13 @@ func (s *Storage) ToggleSubscription(id int64) error {
 
 // scanSubscription 扫描订阅行数据
 // subColumns 订阅表查询列
-const subColumns = `id, name, url, file_path, format, refresh_min, last_fetch, last_success, status, proxy_count, created_at, contributed`
+const subColumns = `id, name, url, file_path, format, refresh_min, last_fetch, last_success, status, proxy_count, created_at`
 
 func scanSubscription(rows *sql.Rows) (*Subscription, error) {
 	sub := &Subscription{}
 	var lastFetch, lastSuccess sql.NullTime
-	var contributed int
 	if err := rows.Scan(&sub.ID, &sub.Name, &sub.URL, &sub.FilePath, &sub.Format,
-		&sub.RefreshMin, &lastFetch, &lastSuccess, &sub.Status, &sub.ProxyCount, &sub.CreatedAt, &contributed); err != nil {
+		&sub.RefreshMin, &lastFetch, &lastSuccess, &sub.Status, &sub.ProxyCount, &sub.CreatedAt); err != nil {
 		return nil, err
 	}
 	if lastFetch.Valid {
@@ -1180,7 +1156,6 @@ func scanSubscription(rows *sql.Rows) (*Subscription, error) {
 	if lastSuccess.Valid {
 		sub.LastSuccess = lastSuccess.Time
 	}
-	sub.Contributed = contributed == 1
 	return sub, nil
 }
 

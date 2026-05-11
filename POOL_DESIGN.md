@@ -73,7 +73,6 @@ main.go (orchestrator)
 | status | TEXT | active / paused |
 | last_fetch | DATETIME | 最后拉取时间 |
 | last_success | DATETIME | 最后有可用节点的时间 |
-| contributed | INTEGER | 是否为访客贡献 |
 
 ## 免费池状态机
 

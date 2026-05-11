@@ -5,6 +5,17 @@
 格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
 版本号遵循 [语义化版本 2.0.0](https://semver.org/lang/zh-CN/)。
 
+## [v0.4.2] - 2026-05-11
+
+### 移除
+
+- **访客贡献订阅功能**
+  - 移除访客贡献订阅弹窗及相关前端交互逻辑（HTML + JS + i18n）
+  - 移除 `/api/subscription/contribute` API 端点及处理函数
+  - 移除 `storage.AddContributedSubscription` 方法
+  - 移除 `Subscription` 和 `Proxy` 结构体中的 `Contributed` 字段
+  - 数据库查询移除 `contributed` 列
+
 ## [v0.4.1] - 2026-04-04
 
 ### 修复

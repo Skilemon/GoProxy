@@ -225,10 +225,9 @@ tr:hover{background:var(--gray-2);box-shadow:inset 0 0 20px rgba(0,255,65,0.05)}
                 <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
               </svg>
             </a>
-            <button class="tab guest-only" onclick="openContributeModal()" style="color:var(--yellow)" data-i18n="contribute.nav">贡献订阅</button>
-            <a href="/login" class="tab" id="login-link" style="display: none;" data-i18n="nav.login">登录</a>
+<a href="/login" class="tab" id="login-link" style="display: none;" data-i18n="nav.login">登录</a>
             <a href="/logout" class="tab admin-only" data-i18n="nav.logout">退出</a>
-            <button class="tab admin-only" onclick="openSettings()" title="" data-i18n-title="contribute.settings" style="padding:4px 8px">
+            <button class="tab admin-only" onclick="openSettings()" title="" data-i18n-title="nav.settings" style="padding:4px 8px">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             </button>
           </div>
@@ -511,52 +510,6 @@ tr:hover{background:var(--gray-2);box-shadow:inset 0 0 20px rgba(0,255,65,0.05)}
   </div>
 </div>
 
-<!-- 访客贡献订阅弹窗 -->
-<div class="modal-overlay" id="contribute-modal" onclick="if(event.target===this) closeContributeModal()" style="display:none">
-  <div class="modal" style="max-width:460px">
-    <div class="modal-title" data-i18n="contribute.title">贡献订阅</div>
-    <div style="color:var(--fg-dim);font-size:11px;margin-bottom:16px;line-height:1.6">
-      <span data-i18n="contribute.desc">分享你的代理订阅，帮助丰富代理池。</span><br>
-      <span style="color:var(--gray-5);font-size:10px" data-i18n="contribute.privacy">你的订阅仅用于此代理池，不会被用于其他渠道。连续探测无可用节点将自动移除。</span>
-    </div>
-    <div class="form-section">
-      <div class="form-grid">
-        <div class="form-group" style="grid-column:1/-1">
-          <label data-i18n="sub.name">名称</label>
-          <input type="text" id="contribute-name" placeholder="">
-        </div>
-        <div class="form-group" style="grid-column:1/-1">
-          <label data-i18n="sub.import_mode">导入方式</label>
-          <div style="display:flex;gap:8px;margin-bottom:8px">
-            <button id="ctab-url" class="ctrl-btn-primary" onclick="switchContributeTab('url')" style="flex:1" data-i18n="sub.tab_url">订阅 URL</button>
-            <button id="ctab-file" class="ctrl-btn-secondary" onclick="switchContributeTab('file')" style="flex:1" data-i18n="sub.tab_file">上传文件</button>
-          </div>
-        </div>
-        <div class="form-group" id="contribute-url-group" style="grid-column:1/-1">
-          <label data-i18n="sub.url_label">订阅 URL</label>
-          <input type="text" id="contribute-url" placeholder="https://example.com/sub?token=xxx">
-          <div class="form-help" data-i18n="sub.url_help">自动识别格式</div>
-        </div>
-        <div class="form-group" id="contribute-file-group" style="grid-column:1/-1;display:none">
-          <label data-i18n="sub.file_label">配置文件</label>
-          <div style="border:1px dashed var(--border);padding:16px;text-align:center;cursor:pointer;transition:all 0.2s"
-               onclick="document.getElementById('contribute-file-input').click()"
-               ondragover="event.preventDefault();this.style.borderColor='var(--fg)'"
-               ondragleave="this.style.borderColor='var(--border)'"
-               ondrop="event.preventDefault();this.style.borderColor='var(--border)';handleContributeFileDrop(event)">
-            <div id="contribute-file-label" style="color:var(--fg-dim);font-size:11px" data-i18n="sub.file_drop">点击选择或拖拽文件到此处</div>
-          </div>
-          <input type="file" id="contribute-file-input" accept=".yaml,.yml,.txt,.conf,.json" style="display:none" onchange="handleContributeFileSelect(this)">
-        </div>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-secondary" onclick="closeContributeModal()" data-i18n="sub.cancel">取消</button>
-      <button class="btn" id="contribute-submit-btn" onclick="submitContribution()" data-i18n="contribute.submit">提交</button>
-    </div>
-  </div>
-</div>
-
 <script>
 // 国际化翻译
 const i18n = {
@@ -681,7 +634,7 @@ const i18n = {
     'sub.nodes': '节点',
     'sub.available': '可用',
     'sub.disabled_label': '禁用',
-    'sub.contributed': '贡献',
+
     // 添加订阅弹窗
     'sub.add_title': '添加订阅',
     'sub.name': '名称',
@@ -697,14 +650,7 @@ const i18n = {
     'sub.refresh_min_help': '仅 URL 模式有效，上传文件不自动刷新',
     'sub.cancel': '取消',
     'sub.submit': '添加',
-    // 贡献订阅弹窗
-    'contribute.title': '贡献订阅',
-    'contribute.desc': '分享你的代理订阅，帮助丰富代理池。',
-    'contribute.privacy': '你的订阅仅用于此代理池，不会被用于其他渠道。连续探测无可用节点将自动移除。',
-    'contribute.submit': '提交',
-    'contribute.validating': '验证中...',
-    'contribute.nav': '贡献订阅',
-    'contribute.settings': '系统设置',
+    'nav.settings': '系统设置',
     // 消息
     'msg.sub_added': '订阅已添加，正在导入节点...',
     'msg.sub_refreshed': '刷新已启动',
@@ -712,7 +658,6 @@ const i18n = {
     'msg.sub_delete_confirm': '确定删除此订阅？',
     'msg.sub_url_required': '请填写订阅 URL',
     'msg.sub_file_required': '请选择或拖拽配置文件',
-    'msg.contribute_thanks': '感谢贡献！订阅已添加，正在导入节点...',
     'msg.submit_failed': '提交失败: ',
   },
   en: {
@@ -833,7 +778,7 @@ const i18n = {
     'sub.nodes': 'nodes',
     'sub.available': 'available',
     'sub.disabled_label': 'disabled',
-    'sub.contributed': 'Contributed',
+
     'sub.add_title': 'Add Subscription',
     'sub.name': 'Name',
     'sub.import_mode': 'Import Mode',
@@ -848,20 +793,13 @@ const i18n = {
     'sub.refresh_min_help': 'URL mode only; file uploads do not auto-refresh',
     'sub.cancel': 'Cancel',
     'sub.submit': 'Add',
-    'contribute.title': 'Contribute Subscription',
-    'contribute.desc': 'Share your proxy subscription to enrich the pool.',
-    'contribute.privacy': 'Your subscription is only used for this proxy pool. Subscriptions with no available nodes for 7 days will be auto-removed.',
-    'contribute.submit': 'Submit',
-    'contribute.validating': 'Validating...',
-    'contribute.nav': 'Contribute',
-    'contribute.settings': 'Settings',
+    'nav.settings': 'Settings',
     'msg.sub_added': 'Subscription added, importing nodes...',
     'msg.sub_refreshed': 'Refresh started',
     'msg.sub_refresh_all': 'Refreshing all subscriptions',
     'msg.sub_delete_confirm': 'Delete this subscription?',
     'msg.sub_url_required': 'Please enter subscription URL',
     'msg.sub_file_required': 'Please select or drag a config file',
-    'msg.contribute_thanks': 'Thanks! Subscription added, importing nodes...',
     'msg.submit_failed': 'Submit failed: ',
   }
 };
@@ -1322,11 +1260,10 @@ async function loadSubscriptions() {
     const disabled = s.disabled_count || 0;
     const total = active + disabled;
     const statsText = total + ' ' + t('sub.nodes') + ' · ' + active + ' ' + t('sub.available') + (disabled > 0 ? ' · ' + disabled + ' ' + t('sub.disabled_label') : '');
-    const badge = s.contributed ? '<span style="display:inline-block;background:var(--orange);color:#000;font-size:7px;font-weight:700;padding:0 3px;margin-left:4px;vertical-align:middle">' + t('sub.contributed') + '</span>' : '';
     return '<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)">' +
       '<div style="flex:1;min-width:0">' +
         '<span style="color:' + statusColor + '">' + statusIcon + '</span> ' +
-        '<span style="font-weight:600">' + (s.name||t('sub.add_title')) + '</span>' + badge +
+        '<span style="font-weight:600">' + (s.name||t('sub.add_title')) + '</span>' +
         '<span style="color:var(--gray-5);margin-left:8px">' + statsText + '</span>' +
       '</div>' +
       '<div style="display:flex;gap:4px;flex-shrink:0">' +
@@ -1480,88 +1417,6 @@ async function deleteSub(id) {
     body: JSON.stringify({id: id})
   });
   loadSubscriptions();
-}
-
-// ========== 访客贡献订阅 ==========
-
-let contributeFileContent = '';
-let contributeTab = 'url';
-
-function switchContributeTab(tab) {
-  contributeTab = tab;
-  document.getElementById('contribute-url-group').style.display = tab === 'url' ? '' : 'none';
-  document.getElementById('contribute-file-group').style.display = tab === 'file' ? '' : 'none';
-  document.getElementById('ctab-url').className = tab === 'url' ? 'ctrl-btn-primary' : 'ctrl-btn-secondary';
-  document.getElementById('ctab-file').className = tab === 'file' ? 'ctrl-btn-primary' : 'ctrl-btn-secondary';
-}
-
-function handleContributeFileSelect(input) {
-  if (input.files && input.files[0]) readContributeFile(input.files[0]);
-}
-function handleContributeFileDrop(e) {
-  if (e.dataTransfer.files && e.dataTransfer.files[0]) readContributeFile(e.dataTransfer.files[0]);
-}
-function readContributeFile(file) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    contributeFileContent = e.target.result;
-    document.getElementById('contribute-file-label').innerHTML =
-      '<span style="color:var(--fg)">✅ ' + file.name + '</span><br>' +
-      '<span style="font-size:9px;opacity:0.6">' + (contributeFileContent.length / 1024).toFixed(1) + ' KB</span>';
-  };
-  reader.readAsText(file);
-}
-
-function openContributeModal() {
-  contributeFileContent = '';
-  contributeTab = 'url';
-  switchContributeTab('url');
-  document.getElementById('contribute-modal').style.display = 'flex';
-}
-
-function closeContributeModal() {
-  document.getElementById('contribute-modal').style.display = 'none';
-}
-
-async function submitContribution() {
-  const name = document.getElementById('contribute-name').value || t('contribute.title');
-  const data = { name };
-
-  if (contributeTab === 'url') {
-    const url = document.getElementById('contribute-url').value;
-    if (!url) { alert(t('msg.sub_url_required')); return; }
-    data.url = url;
-  } else {
-    if (!contributeFileContent) { alert(t('msg.sub_file_required')); return; }
-    data.file_content = contributeFileContent;
-  }
-
-  const btn = document.getElementById('contribute-submit-btn');
-  btn.textContent = t('contribute.validating');
-  btn.disabled = true;
-
-  const result = await api('/api/subscription/contribute', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(data)
-  });
-
-  btn.textContent = t('contribute.submit');
-  btn.disabled = false;
-
-  if (result && result.error) {
-    alert(t('msg.submit_failed') + result.error);
-    return;
-  }
-  if (result && result.status === 'contributed') {
-    closeContributeModal();
-    showToast(t('msg.contribute_thanks'));
-    document.getElementById('contribute-name').value = '';
-    document.getElementById('contribute-url').value = '';
-    contributeFileContent = '';
-    document.getElementById('contribute-file-label').innerHTML = '' + t('sub.file_drop') + '';
-    setTimeout(loadSubscriptions, 3000);
-  }
 }
 
 loadAll();

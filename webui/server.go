@@ -99,7 +99,6 @@ func (s *Server) Start() {
 	// 订阅管理 API
 	mux.HandleFunc("/api/subscriptions", s.readOnlyMiddleware(s.apiSubscriptions))
 	mux.HandleFunc("/api/custom/status", s.readOnlyMiddleware(s.apiCustomStatus))
-	mux.HandleFunc("/api/subscription/contribute", s.apiSubscriptionContribute) // 访客可用
 	mux.HandleFunc("/api/subscription/add", s.authMiddleware(s.apiSubscriptionAdd))
 	mux.HandleFunc("/api/subscription/delete", s.authMiddleware(s.apiSubscriptionDelete))
 	mux.HandleFunc("/api/subscription/refresh", s.authMiddleware(s.apiSubscriptionRefresh))
@@ -561,94 +560,6 @@ func (s *Server) apiCustomStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	jsonOK(w, s.customMgr.GetStatus())
-}
-
-// apiSubscriptionContribute 访客贡献订阅（支持 URL 和文件上传，需验证通过才入库）
-func (s *Server) apiSubscriptionContribute(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		jsonError(w, "method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-	var req struct {
-		Name        string `json:"name"`
-		URL         string `json:"url"`
-		FileContent string `json:"file_content"`
-	}
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		jsonError(w, "invalid request", http.StatusBadRequest)
-		return
-	}
-	if req.URL == "" && req.FileContent == "" {
-		jsonError(w, "请填写订阅 URL 或上传配置文件", http.StatusBadRequest)
-		return
-	}
-	if req.Name == "" {
-		req.Name = "贡献订阅"
-	}
-
-	// 如果上传了文件，保存到本地
-	filePath := ""
-	if req.FileContent != "" {
-		dataDir := os.Getenv("DATA_DIR")
-		if dataDir == "" {
-			dataDir = "."
-		}
-		subDir := filepath.Join(dataDir, "subscriptions")
-		os.MkdirAll(subDir, 0755)
-		filePath = filepath.Join(subDir, fmt.Sprintf("contribute_%d.yaml", time.Now().UnixMilli()))
-		if err := os.WriteFile(filePath, []byte(req.FileContent), 0644); err != nil {
-			jsonError(w, "保存文件失败: "+err.Error(), http.StatusInternalServerError)
-			return
-		}
-		filePath, _ = filepath.Abs(filePath)
-	}
-
-	// 先验证能解析出节点
-	if s.customMgr != nil {
-		nodeCount, err := s.customMgr.ValidateSubscription(req.URL, filePath)
-		if err != nil {
-			if filePath != "" {
-				os.Remove(filePath)
-			}
-			jsonError(w, "订阅验证失败: "+err.Error(), http.StatusBadRequest)
-			return
-		}
-		log.Printf("[webui] 访客贡献订阅验证通过: %s (%d 个节点)", req.Name, nodeCount)
-	}
-
-	// 入库
-	refreshMin := config.Get().CustomRefreshInterval
-	var id int64
-	var err error
-	if req.URL != "" {
-		id, err = s.storage.AddContributedSubscription(req.Name, req.URL, refreshMin)
-	} else {
-		// 文件上传的贡献，用 AddSubscription + contributed 标记
-		id, err = s.storage.AddSubscription(req.Name, "", filePath, "auto", refreshMin)
-		if err == nil {
-			// 标记为贡献
-			s.storage.GetDB().Exec(`UPDATE subscriptions SET contributed = 1 WHERE id = ?`, id)
-		}
-	}
-	if err != nil {
-		if filePath != "" {
-			os.Remove(filePath)
-		}
-		jsonError(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	// 异步刷新入池
-	if s.customMgr != nil {
-		go func() {
-			if err := s.customMgr.RefreshSubscription(id); err != nil {
-				log.Printf("[webui] 贡献订阅刷新失败: %v", err)
-			}
-		}()
-	}
-
-	log.Printf("[webui] 🎁 访客贡献订阅: %s (url=%v file=%v)", req.Name, req.URL != "", filePath != "")
-	jsonOK(w, map[string]interface{}{"status": "contributed", "id": id})
 }
 
 // apiSubscriptionAdd 添加订阅
